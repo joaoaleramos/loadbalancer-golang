@@ -1,10 +1,10 @@
 # Project loadbalancer
 
-One Paragraph of project description goes here
+This Project its is a simple load balancer that distributes incoming network traffic across multiple servers  using  weighted algorithm.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+TODO: Describe how to set up this project with a configuration file.
 
 ## MakeFile
 
