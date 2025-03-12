@@ -8,12 +8,12 @@ import (
 )
 
 type Backend struct {
-	URL    *url.URL
-	Weight float64
+	URL    *url.URL `yaml:"url"`
+	Weight float64  `yaml:"weight"`
 }
 
 type LoadBalancer struct {
-	backends []Backend
+	backends []Backend `yaml:"backends"`
 }
 
 func NewLoadBalancer(servers map[string]float64) *LoadBalancer {
