@@ -17,9 +17,9 @@ type LoadBalancer struct {
 	Backends []Backend `yaml:"backends"`
 }
 
-func NewLoadBalancer(servers []Backend) *LoadBalancer {
+func NewLoadBalancer(services []Backend) *LoadBalancer {
 	return &LoadBalancer{
-		Backends: servers,
+		Backends: services,
 	}
 }
 
