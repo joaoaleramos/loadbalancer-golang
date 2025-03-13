@@ -1,8 +1,8 @@
 package main
 
 import (
-	"loadbalancer/cmd/util"
 	"loadbalancer/internal"
+	"loadbalancer/internal/util"
 	"log"
 	"net/http"
 	"os"
