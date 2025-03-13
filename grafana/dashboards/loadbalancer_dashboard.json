@@ -1,0 +1,76 @@
+{
+  "overwrite": true,
+  "uid": "loadbalancer-dashboard",
+  "id": 1,
+  "title": "Load Balancer Dashboard",
+  "tags": [],
+  "timezone": "browser",
+  "schemaVersion": 27,
+  "version": 1,
+  "refresh": "5s",
+  "templating": {
+    "list": [
+      {
+        "name": "backend",
+        "label": "Backend",
+        "type": "query",
+        "datasource": "Prometheus",
+        "query": "label_values(loadbalancer_requests_total, backend)",
+        "multi": true,
+        "includeAll": false,
+        "refresh": 1,
+        "sort": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "expr": "loadbalancer_requests_total{backend=~\"$backend\"}",
+          "format": "time_series",
+          "interval": "",
+          "legendFormat": "{{backend}}",
+          "refId": "A"
+        }
+      ],
+      "repeat": "backend",
+      "repeatDirection": "h",
+      "title": "Requests Handled by Backend: $backend",
+      "type": "graph",
+      "xaxis": {
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "show": true
+        },
+        {
+          "format": "short",
+          "show": true
+        }
+      ]
+    }
+  ]
+}
