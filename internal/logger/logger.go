@@ -2,9 +2,10 @@ package logger
 
 import "go.uber.org/zap"
 
-var Logger *zap.Logger
+var Logger *zap.SugaredLogger
 
 func init() {
-	Logger, _ = zap.NewProduction()
-	defer Logger.Sync()
+	zapLogger, _ := zap.NewProduction()
+	defer zapLogger.Sync()
+	Logger = zapLogger.Sugar()
 }

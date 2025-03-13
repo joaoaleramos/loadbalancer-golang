@@ -6,15 +6,13 @@ import (
 	"loadbalancer/internal/util"
 	"net/http"
 	"os"
-
-	"go.uber.org/zap"
 )
 
 func main() {
 	configPath := "loadfig.yaml"
 	lbConfig, err := util.ParseYAML(configPath)
 	if err != nil {
-		logger.Logger.Fatal("Failed to parse config: %v", zap.Error(err))
+		logger.Logger.Fatalf("Failed to parse config: %v", err)
 	}
 
 	lb := internal.NewLoadBalancer(lbConfig.Backends)
@@ -25,6 +23,6 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	logger.Logger.Info("Load Balancer running on port:", zap.String("port", port))
-	logger.Logger.Fatal(http.ListenAndServe(":"+port, nil).Error())
+	logger.Logger.Info("Load Balancer running on port: ", port)
+	logger.Logger.Fatal(http.ListenAndServe(":"+port, nil))
 }

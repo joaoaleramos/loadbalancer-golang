@@ -5,7 +5,6 @@ import (
 	"loadbalancer/internal/logger"
 	"os"
 
-	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 )
 
@@ -22,6 +21,6 @@ func ParseYAML(path string) (internal.LoadBalancer, error) {
 	if err := yaml.Unmarshal(data, &config); err != nil {
 		return internal.LoadBalancer{}, err
 	}
-	logger.Logger.Info("Parsed config:", zap.Any("config", config))
+	logger.Logger.Info("Parsed config:", config)
 	return internal.LoadBalancer{Backends: config.Services}, nil
 }
