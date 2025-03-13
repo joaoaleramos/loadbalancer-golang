@@ -1,6 +1,7 @@
 package main
 
 import (
+	"loadbalancer/cmd/util"
 	"loadbalancer/internal"
 	"log"
 	"net/http"
@@ -8,16 +9,20 @@ import (
 )
 
 func main() {
-	servers := map[string]float64{
-		"http://localhost:5001": 0.7,
-		"http://localhost:5002": 0.3,
+	configPath := "loadfig.yaml"
+	lbConfig, err := util.ParseYAML(configPath)
+	if err != nil {
+		log.Fatalf("Failed to parse config: %v", err)
 	}
 
-	lb := internal.NewLoadBalancer(servers)
+	lb := internal.NewLoadBalancer(lbConfig.Backends)
 
 	http.HandleFunc("/", lb.ServeProxy)
 
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	log.Println("Load Balancer running on port:", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

@@ -8,42 +8,52 @@ import (
 )
 
 type Backend struct {
-	URL    *url.URL `yaml:"url"`
-	Weight float64  `yaml:"weight"`
+	Name   string  `yaml:"name"`
+	URL    string  `yaml:"url"`
+	Weight float64 `yaml:"weight"`
 }
 
 type LoadBalancer struct {
-	backends []Backend `yaml:"backends"`
+	Backends []Backend `yaml:"backends"`
 }
 
-func NewLoadBalancer(servers map[string]float64) *LoadBalancer {
-	var backends []Backend
-	for server, weight := range servers {
-		parsedURL, _ := url.Parse(server)
-		backends = append(backends, Backend{URL: parsedURL, Weight: weight})
-	}
-
+func NewLoadBalancer(servers []Backend) *LoadBalancer {
 	return &LoadBalancer{
-		backends: backends,
+		Backends: servers,
 	}
 }
 
 func (lb *LoadBalancer) getNextServer() *url.URL {
+	if len(lb.Backends) == 0 {
+		return nil
+	}
+
 	randomVal := rand.Float64()
 	currentWeight := 0.0
 
-	for _, backend := range lb.backends {
+	for _, backend := range lb.Backends {
 		currentWeight += backend.Weight
 		if randomVal <= currentWeight {
-			return backend.URL
+			parsedURL, err := url.Parse(backend.URL)
+			if err != nil {
+				return nil
+			}
+			return parsedURL
 		}
 	}
-
-	return lb.backends[len(lb.backends)-1].URL
+	parsedURL, err := url.Parse(lb.Backends[len(lb.Backends)-1].URL)
+	if err != nil {
+		return nil
+	}
+	return parsedURL
 }
 
 func (lb *LoadBalancer) ServeProxy(w http.ResponseWriter, r *http.Request) {
 	target := lb.getNextServer()
+	if target == nil {
+		http.Error(w, "No backends available", http.StatusServiceUnavailable)
+		return
+	}
 	proxyURL := fmt.Sprintf("%s%s", target.String(), r.URL.Path)
 
 	fmt.Printf("Redirecting to: %s\n", target.String())

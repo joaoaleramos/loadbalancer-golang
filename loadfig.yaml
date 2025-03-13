@@ -1,0 +1,10 @@
+services:
+  - name: backend1
+    url: "http://localhost:5001"
+    weight: 0.5
+  - name: backend2
+    url: "http://localhost:5002"
+    weight: 0.2
+  - name: backend3
+    url: "http://localhost:5003"
+    weight: 0.3
