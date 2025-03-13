@@ -25,6 +25,10 @@ After that you can run the application with the command `make run` or `go run cm
 
 Run build make command with tests
 
+## Monitoring Request Metrics
+
+In addition to the load balancer, the application also exposes a `/metrics` endpoint that can be used to monitor the request metrics of the load balancer. You can visualize the number of requests per service going to `localhost:3000/dashboard` and get into `Load Balancer Dashboard` that will contain all services running.
+
 ```bash
 make all
 ```
